@@ -68,9 +68,13 @@ class QAgent(object):
     # Improve agent given current state and last_reward
     update_result = self.reinforce_(state=state, last_reward=last_reward)
 
-    # 
-    # 
-    # 
+    # Choose action based on current state
+    action = self.act_(state=state)
+
+    # Update
+    self.last_state = state
+    self.last_action = action
+    return action, update_result
 
   def reinforce_(self, state, last_reward):
     """Improve agent based on current exprience (last_state, last_action, last_reward, state)
@@ -87,8 +91,8 @@ class QAgent(object):
     """Update Q table using Bellman iteration
     """
     best_qval = max(self.lookup_table_(current_state))
-    # if not isinstance(last_state, Hashable):
-    #   last_state = tuple(last_state.rave()) # passed in numpy array
+    if not isinstance(last_state, Hashable):
+      last_state = tuple(np.array(last_state).ravel()) # passed in numpy array
     delta_q = reward + self.GAMMA * best_qval
     last_state_action = (last_state, last_action)
     if last_state_action in self.q_table:
@@ -103,8 +107,8 @@ class QAgent(object):
   def lookup_table_(self, state):
     """return the q values of all ACTIONS at a given state
     """
-    # if not isinstance(state, Hashable):
-      # state = tuple(state.ravel())
+    if not isinstance(state, Hashable):
+      state = tuple(np.array(state).ravel())
     qvalues = []
     for a in self.ACTIONS:
       if(state, a) in self.q_table:
@@ -114,9 +118,30 @@ class QAgent(object):
         qvalues.append(self.DEFAULT_QVAL)
     return qvalues
 
+  def act_(self, state):
+    """Choose an action based on current state.
+    """
+    if state is None:
+      # idx_action = randint(0, len(self.ACTIONS))  # if state cannot be internalized as state, random act
+      idx_action = np.random.randint(0, len(self.ACTIONS))
+      action = self.ACTIONS[idx_action]
+      return action
 
+    if self.EXPLORE == 'epsilon':
+      if np.random.rand() < self.EPSILON: # random exploration with 'epsilon' prob
+        idx_action = np.random.randint(0, len(self.ACTIONS))
+        action = self.ACTIONS[idx_action]
+        return action
+      q_vals = self.lookup_table_(state)
+      max_qval = max(q_vals)
+      idx_best_actions = [i for i in range(len(q_vals)) if q_vals[i] == max_qval]
+      idx_action = idx_best_actions[np.random.randint(0, len(idx_best_actions))]
+      return self.ACTIONS[idx_action]
 
-
+    # if self.EXPLORE == 'soft_probability':
+    #   q_vals = self.lookup_table_(state) # state = internal_state
+    #   exp_q_vals = exp(q_vals)
+    raise ValueError('Unknown keyword for exploration strategy!')
 
 
 

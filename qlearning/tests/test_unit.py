@@ -16,33 +16,33 @@ class TestQuantizer(unittest.TestCase):
     width = _calc_size(-2,2,4)
     self.assertEqual(width, 1)
 
-  def test_get_discrete_quantity(self):
-    res = _get_discrete_quantity(low=0,high=10,value=-1,n_of_parts=2,width=2)
-    self.assertEqual(res, 0)
+  # def test_get_discrete_quantity(self):
+  #   res = _get_discrete_quantity(low=0,high=10,value=-1,n_of_parts=2,width=2)
+  #   self.assertEqual(res, 0)
 
-    res = _get_discrete_quantity(low=0,high=10,value=0,n_of_parts=2,width=2)
-    self.assertEqual(res, 0)
+  #   res = _get_discrete_quantity(low=0,high=10,value=0,n_of_parts=2,width=2)
+  #   self.assertEqual(res, 0)
 
-    res = _get_discrete_quantity(low=0,high=10,value=10,n_of_parts=2,width=2)
-    self.assertEqual(res, 1)
+  #   res = _get_discrete_quantity(low=0,high=10,value=10,n_of_parts=2,width=2)
+  #   self.assertEqual(res, 1)
 
-    res = _get_discrete_quantity(low=0,high=10,value=11,n_of_parts=2,width=2)
-    self.assertEqual(res, 1)
+  #   res = _get_discrete_quantity(low=0,high=10,value=11,n_of_parts=2,width=2)
+  #   self.assertEqual(res, 1)
 
-    res = _get_discrete_quantity(low=0,high=10,value=9.9,n_of_parts=3,width=3.33)
-    self.assertEqual(res, 2)
+  #   res = _get_discrete_quantity(low=0,high=10,value=9.9,n_of_parts=3,width=3.33)
+  #   self.assertEqual(res, 2)
 
 
   def test_quantize(self):
     quantizer = Quantizer(low=[0],high=[10],buckets=[2])
 
-    res = quantizer.quantize([[7],[1]])
-    self.assertEqual(res, [[1],[0]])
+    res = quantizer.quantize([7])
+    self.assertEqual(res, [1])
 
     quantizer = Quantizer(low=[0,20],high=[10,60],buckets=[2,4])
 
-    res = quantizer.quantize([[7,2],[1,50]])
-    self.assertEqual(res, [[1,0],[0,3]])
+    res = quantizer.quantize([7,2])
+    self.assertEqual(res, [1,0])
 
 
 
@@ -110,6 +110,16 @@ class TestQtable(unittest.TestCase):
 
     res = qagent.reinforce_(state=(0,1),last_reward=None)
     self.assertEqual(res, None)
+
+  def test_act_(self):
+    qagent = QAgent(actions=[1,2,3])
+
+    action = qagent.act_(None)
+    self.assertTrue(action in [1,2,3])
+
+
+    action = qagent.act_((1,1))
+    self.assertTrue(action in [1,2,3])
 
 
 if __name__ == '__main__':

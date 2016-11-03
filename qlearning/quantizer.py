@@ -8,7 +8,7 @@ def _calc_size(low, high, bucket):
   return width
 
 def _get_discrete_quantity(low, high, value, n_of_parts, width):
-  if value <= low:
+  if value < low:
     return 0
   if value >= high:
     return n_of_parts - 1
@@ -42,26 +42,26 @@ class Quantizer(object):
       """
     quantized_obs = []
 
-  def quantize(self, observations):
+  def quantize(self, observation):
     """Quantize the observation
     """
 
-    discrete_observations = []
-    for i in range(len(observations)):
-      observation = observations[i]
-      values = []
-      for j in range(self.dim):
-        values.append(
-          _get_discrete_quantity(
-            self.low[j],
-            self.high[j],
-            observation[j],
-            self.buckets[j],
-            self.width[j]
-          )
+    # discrete_observations = []
+    # for i in range(len(observations)):
+    #   observation = observations[i]
+    values = []
+    for j in range(len(observation)):
+      values.append(
+        _get_discrete_quantity(
+          self.low[j],
+          self.high[j],
+          observation[j],
+          self.buckets[j],
+          self.width[j]
         )
-      discrete_observations.append(values)
+      )
+      # discrete_observations.append(values)
 
-
-    return discrete_observations
+    return values
+    # return discrete_observations
 
