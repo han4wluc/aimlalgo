@@ -148,7 +148,7 @@ class TestCostFunction(unittest.TestCase):
     h3 = hypothesis(X_test, theta3)
 
     h = np.concatenate((h1,h2,h3),axis=1)
-    res = np.argmax(h, axis=0)
+    res = np.argmax(h, axis=1)
     np.testing.assert_equal(res, np.array([0,1,2]))
 
 

@@ -48,7 +48,7 @@ class TestLinearRegression(unittest.TestCase):
     numOfIter = 1000;
     expectedTheta = np.array([[ 5.2148],
                               [-0.5733]])
-    # expectedJHist[0] = 0.85426; 
+    # expectedJHist[0] = 0.85426;
     [actualTheta, actualJHist] = gradient_descent(X, y, theta, alpha, numOfIter)
     # print actualJHist
     np.testing.assert_almost_equal(actualTheta, expectedTheta, decimal=4);
