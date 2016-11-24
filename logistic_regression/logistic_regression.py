@@ -44,9 +44,10 @@ def gradient_descent(X, y, theta, alpha, num_iters, lmbda=0):
   for i in range(num_iters):
     h = hypothesis(X, theta)
     error = (h - y)
-    r = error * X
-    rr = constant * r.sum(axis=0)
-    rr = np.reshape(rr,(n,1))
+    # r = error * X
+    rr = np.dot(X.T, error)
+    # rr = constant * r.sum(axis=0)
+    # rr = np.reshape(rr,(n,1))
     
     # TODO check reg
     theta = theta - rr

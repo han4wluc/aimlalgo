@@ -34,6 +34,21 @@ class TestLinearRegression(unittest.TestCase):
     actual = compute_cost(X, y, theta)
     np.testing.assert_almost_equal(actual, expected)
 
+  def test_compute_cost_reg(self):
+    X = np.array([[1, 2],
+                  [1, 3],
+                  [1, 4],
+                  [1, 5]])
+    y = np.array([[ 7.],
+                  [ 6.], 
+                  [ 5.], 
+                  [ 4.]]);
+    theta = np.array([[0.1],
+                      [0.2]])
+    expected = 11.945625
+    actual = compute_cost(X, y, theta, 0.1)
+    np.testing.assert_almost_equal(actual, expected)
+
   def test_gradient_descent(self):
     X = np.array([[1, 5],
                   [1, 2],
